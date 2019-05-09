@@ -6,16 +6,10 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms
 
-extern crate chrono;
-extern crate crossbeam_channel as channel;
-extern crate libc;
-extern crate log;
-extern crate log4rs;
-extern crate signal_hook;
-
 pub use log::{debug, error, info, log, log_enabled, trace, warn};
 
 use chrono::Local;
+use crossbeam_channel::{bounded, Receiver};
 use libc::c_int;
 use log::LevelFilter;
 use log4rs::append::console::ConsoleAppender;
@@ -45,8 +39,8 @@ struct Directive {
 
 static INIT_LOG: Once = ONCE_INIT;
 
-fn notify(signals: &[c_int]) -> Result<channel::Receiver<c_int>, Error> {
-    let (s, r) = channel::bounded(100);
+fn notify(signals: &[c_int]) -> Result<Receiver<c_int>, Error> {
+    let (s, r) = bounded(100);
     let signals = signal_hook::iterator::Signals::new(signals)?;
     thread::spawn(move || {
         for signal in signals.forever() {
