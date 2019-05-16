@@ -3,6 +3,10 @@ name = "cita-logger"
 version = "0.1.0"
 authors = ["Cryptape Technologies <contact@cryptape.com>"]
 edition = "2018"
+description = "Logger for CITA."
+homepage = "https://github.com/cryptape/cita-logger"
+repository = "https://github.com/cryptape/cita-logger"
+license = "Apache-2.0"
 
 [dependencies]
 log = "0.4.3"
