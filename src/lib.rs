@@ -43,7 +43,7 @@ fn notify(signals: &[c_int]) -> Result<Receiver<c_int>, Error> {
     let signals = signal_hook::iterator::Signals::new(signals)?;
     thread::spawn(move || {
         for signal in signals.forever() {
-            s.send(signal);
+            let _ = s.send(signal);
         }
     });
     Ok(r)
