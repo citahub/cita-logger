@@ -19,7 +19,7 @@ use std::env;
 use std::fs;
 use std::io::Error;
 use std::str::FromStr;
-use std::sync::{Once, ONCE_INIT};
+use std::sync::Once;
 use std::thread;
 use std::vec::Vec;
 
@@ -36,7 +36,7 @@ struct Directive {
     level: LevelFilter,
 }
 
-static INIT_LOG: Once = ONCE_INIT;
+static INIT_LOG: Once = Once::new();
 
 fn notify(signals: &[c_int]) -> Result<Receiver<c_int>, Error> {
     let (s, r) = bounded(100);
@@ -219,7 +219,7 @@ fn config_file_appender(file_path: &str, directives: Vec<Directive>) -> Config {
 }
 
 // ConsoleAppender config
-fn config_console_appender(service_name: &str, directives: Vec<Directive>) -> Config {
+fn config_console_appender(_service_name: &str, directives: Vec<Directive>) -> Config {
     let pattern = "{{\"_CMB_LOG_SPEC_VERSION\": \"2.0\",\"method\": \"{t:20.20} - {L:5}\", \"type\": \"BASETYPE\", \"level\": \"{l:5}\", \"tid\": \"{I}\", \"ts\": \"{d(%Y-%m-%dT%H:%M:%S%.9fZ)}\", \"content\": \"{m}\"}}{n}";
     let stdout = ConsoleAppender::builder()
         .encoder(Box::new(PatternEncoder::new(&pattern)))
