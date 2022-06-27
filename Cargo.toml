@@ -1,0 +1,17 @@
+[package]
+name = "cita-logger"
+version = "0.1.0"
+authors = ["Cryptape Technologies <contact@cryptape.com>"]
+edition = "2018"
+description = "Logger for CITA. Only use for CMB"
+homepage = "https://github.com/cryptape/cita-logger"
+repository = "https://github.com/cryptape/cita-logger"
+license = "Apache-2.0"
+
+[dependencies]
+log = "0.4.3"
+log4rs = "0.8"
+crossbeam-channel = "0.3.9"
+signal-hook = "0.1"
+chrono = "0.4"
+libc = "~0.2"
