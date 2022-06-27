@@ -192,10 +192,9 @@ fn create_loggers(directives: Vec<Directive>, appender: &str) -> Vec<Logger> {
 
 // FileAppender config
 fn config_file_appender(file_path: &str, directives: Vec<Directive>) -> Config {
+    let pattern = "{{\"_CMB_LOG_SPEC_VERSION\": \"2.0\",\"method\": \"{t:20.20} - {L:5}\", \"type\": \"BASETYPE\", \"level\": \"{l:5}\", \"tid\": \"{I}\", \"ts\": \"{d(%Y-%m-%dT%H:%M:%S%.9fZ)}\", \"content\": \"{m}\"}}{n}";
     let requests = FileAppender::builder()
-        .encoder(Box::new(PatternEncoder::new(
-            "{d(%Y-%m-%d - %H:%M:%S)} | {t:20.20} - {L:5} | {l:5} - {m}{n}",
-        )))
+        .encoder(Box::new(PatternEncoder::new(&pattern)))
         .build(file_path)
         .unwrap();
 
@@ -221,7 +220,7 @@ fn config_file_appender(file_path: &str, directives: Vec<Directive>) -> Config {
 
 // ConsoleAppender config
 fn config_console_appender(service_name: &str, directives: Vec<Directive>) -> Config {
-    let pattern = format!("[{}]: ", service_name) + "{d} - {l} - {m}{n}";
+    let pattern = "{{\"_CMB_LOG_SPEC_VERSION\": \"2.0\",\"method\": \"{t:20.20} - {L:5}\", \"type\": \"BASETYPE\", \"level\": \"{l:5}\", \"tid\": \"{I}\", \"ts\": \"{d(%Y-%m-%dT%H:%M:%S%.9fZ)}\", \"content\": \"{m}\"}}{n}";
     let stdout = ConsoleAppender::builder()
         .encoder(Box::new(PatternEncoder::new(&pattern)))
         .build();
