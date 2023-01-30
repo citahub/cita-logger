@@ -40,7 +40,7 @@ static INIT_LOG: Once = Once::new();
 
 fn notify(signals: &[c_int]) -> Result<Receiver<c_int>, Error> {
     let (s, r) = bounded(100);
-    let signals = signal_hook::iterator::Signals::new(signals)?;
+    let mut signals = signal_hook::iterator::Signals::new(signals)?;
     thread::spawn(move || {
         for signal in signals.forever() {
             let _ = s.send(signal);
@@ -70,7 +70,7 @@ pub fn init_config(favour: &LogFavour) {
                 let handle = log4rs::init_config(config).unwrap();
 
                 // Log rotate via signal(USR1)
-                let signal = notify(&[signal_hook::SIGUSR1]).unwrap();
+                let signal = notify(&[signal_hook::consts::SIGUSR1]).unwrap();
 
                 // Any and all threads spawned must come after the first call to notify (or notify_on).
                 // This is so all spawned threads inherit the blocked status of signals.
